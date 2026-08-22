@@ -1,0 +1,66 @@
+% ==========================================================
+% BODY TEMPLATE — LaTeX (memoir class)
+% This file is included by interior.tex via \input{body}
+%
+% COMMANDS AVAILABLE:
+%   \chapteropener{1}{Chapter Title}       — ornamental chapter opener
+%   \lettrine[lines=3]{T}{ext}            — drop cap first paragraph
+%   \begin{recipebox}{Name} ... \end{recipebox}  — styled recipe block
+%   \yieldline{Yield: 24 • Prep: 15 min}  — centered yield line
+%   \ornamentaldivider                    — three-diamond divider
+%   \thinnerule                           — thin accent rule
+%
+% Use \clearpage before each \chapteropener (except the first).
+% ==========================================================
+
+\chapteropener{1}{Chapter Title}
+
+\lettrine[lines=3, lhang=0.33, loversize=0.1]{T}{he} first paragraph of
+your chapter starts with a decorative drop cap. The rest of the paragraph
+flows normally. This is where you introduce the chapter's theme, set the
+tone, and draw the reader in.
+
+Subsequent paragraphs are indented and justified automatically by the
+memoir class. No special markup is needed for body text.
+
+\section{Section Heading}
+
+Level-2 headings are styled with the accent color and a larger font size.
+They appear in the table of contents and in the running headers.
+
+\begin{recipebox}{Recipe Name}
+
+\textbf{Ingredients:}
+\begin{itemize}
+  \item 1 cup all-purpose flour
+  \item \(\frac{1}{2}\) cup sugar
+  \item 2 large eggs
+  \item 1 teaspoon vanilla extract
+\end{itemize}
+
+\textbf{Instructions:}
+\begin{enumerate}
+  \item Preheat the oven to 350°F (175°C).
+  \item In a large bowl, combine the dry ingredients.
+  \item In a separate bowl, whisk together the wet ingredients.
+  \item Fold the wet into the dry until just combined.
+  \item Pour into a prepared pan and bake for 25--30 minutes.
+\end{enumerate}
+
+\end{recipebox}
+
+\yieldline{Yield: 12 servings \textbullet{} Prep: 15 minutes \textbullet{} Cook: 30 minutes}
+
+\thinnerule
+
+More paragraph text after the recipe. The recipe box provides a visual
+break and makes it easy for readers to find individual recipes when
+flipping through the book.
+
+\clearpage
+
+\chapteropener{2}{Next Chapter}
+
+\lettrine[lines=3]{B}{eginning} another chapter with a fresh drop cap
+and the ornamental chapter opener creates a consistent rhythm throughout
+the book.

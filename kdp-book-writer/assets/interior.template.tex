@@ -1,0 +1,266 @@
+% ==========================================================
+% KDP A5 INTERIOR TEMPLATE — LaTeX (memoir class)
+% A5 / 148x210mm, black ink, white paper
+% Marketplace target: Amazon.co.jp
+% DESIGN: Premium — ornamental chapter openers, drop caps,
+%          running headers, styled recipe blocks, microtype.
+% Edit the META block below, then compile:
+%   pdflatex interior.tex
+%   pdflatex interior.tex   (run twice for TOC and headers)
+% ==========================================================
+
+\documentclass[a5paper, 10.5pt, openright, twoside]{memoir}
+
+% ---------- PACKAGES ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{microtype}          % character protrusion + font expansion (THE secret sauce)
+\usepackage{lettrine}           % ornamental drop caps
+\usepackage{tikz}               % decorative elements
+\usepackage{xcolor}             % colored accents
+\usepackage{enumitem}           % customized lists
+\usepackage{tabularx}           % flexible tables
+\usepackage{booktabs}           % professional table rules
+\usepackage{graphicx}           % images (if needed)
+\usepackage{parskip}            % paragraph spacing (alternative to indent)
+\usepackage{setspace}           % line spacing control
+
+% ---------- META (edit these) ----------
+\newcommand{\booktitle}{Your Book Title}
+\newcommand{\booksubtitle}{A subtitle that sells}
+\newcommand{\bookauthor}{Your Pen Name}
+\newcommand{\bookyear}{2026}
+
+% ---------- COLOR PALETTE ----------
+\definecolor{accent}{HTML}{2B5A3C}    % forest green — change to match your cover
+\definecolor{accentlight}{HTML}{E8F0EB}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{rulegray}{HTML}{B0A999}
+\definecolor{recipedbg}{HTML}{F8F6F2}
+\definecolor{tocblue}{HTML}{1A5276}   % blue for table of contents entries
+
+% ---------- PAGE GEOMETRY (A5 with KDP margins) ----------
+\settrimmedsize{210mm}{148mm}{*}
+\setlrmarginsandblock{12.7mm}{12.7mm}{*}
+\setulmarginsandblock{16mm}{16mm}{*}
+\setheadfoot{\baselineskip}{2\baselineskip}
+\setheaderspaces{*}{2\baselineskip}{*}
+\checkandfixthelayout
+
+% ---------- TYPOGRAPHY ----------
+\renewcommand{\rmdefault}{ppl}  % Palatino as body font
+\renewcommand{\bfdefault}{b}    % bold weight
+
+\setlength{\parindent}{3.5mm}
+\setlength{\parskip}{0pt}
+\linespread{1.15}               % comfortable reading spacing
+
+% ---------- CHAPTER HEADINGS (memoir built-in) ----------
+% Memoir provides its own chapter heading customization — no titlesec needed.
+\setlength{\beforechapskip}{0pt}
+\setlength{\afterchapskip}{20pt}
+
+% Chapter title font: large, centered, colored
+\renewcommand{\chaptitlefont}{\normalfont\Huge\bfseries\centering}
+\renewcommand{\chapnamefont}{\normalfont\Large\bfseries\color{accent}}
+\renewcommand{\chapnumfont}{\normalfont\Large\bfseries\color{accent}}
+
+% Print chapter number as a TikZ badge
+\renewcommand{\printchapternum}{%
+  \centering%
+  \begin{tikzpicture}
+    \node[fill=accent, text=white, rounded corners=2pt, inner sep=4pt, minimum size=20pt] {%
+      \large\bfseries\thechapter%
+    };
+  \end{tikzpicture}%
+  \par\vspace{8pt}%
+}
+
+% Decorative rule after chapter number
+\renewcommand{\afterchapternum}{\par\vspace{4pt}\centering\rule{0.3\textwidth}{0.4pt}\par}
+
+% ---------- SECTION HEADINGS (memoir built-in) ----------
+\setsecheadstyle{\normalfont\Large\bfseries\color{accent}}
+\setaftersecheffect{}
+\setsubsecheadstyle{\normalfont\large\itshape\color{textgray}}
+\setsubsubsecheadstyle{\normalfont\normalsize\bfseries\itshape\color{textgray}}
+
+% ---------- HEADERS & FOOTERS (memoir built-in, not fancyhdr) ----------
+% Memoir has its own pagestyle system — avoids fancyhdr conflicts.
+% Define a custom 'ruled' pagestyle with colored headers.
+\makepagestyle{ruled}
+\makeevenhead{ruled}{\small\itshape\color{rulegray}\leftmark}{}{}
+\makeoddhead{ruled}{\small\itshape\color{rulegray}\rightmark}{}{}
+\makeevenfoot{ruled}{}{\small\color{textgray}\thepage}{}
+\makeoddfoot{ruled}{}{\small\color{textgray}\thepage}{}
+\makeheadrule{ruled}{\headwidth}{0.3pt}
+\makefootrule{ruled}{\headwidth}{0pt}{}
+
+% Plain pagestyle (chapter openers) — just page number, no header
+\makepagestyle{plain}
+\makeevenfoot{plain}{}{\small\color{textgray}\thepage}{}
+\makeoddfoot{plain}{}{\small\color{textgray}\thepage}{}
+\makeheadrule{plain}{\headwidth}{0pt}
+
+% ---------- LISTS ----------
+\setlist[itemize]{leftmargin=*, itemsep=2pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=*, itemsep=2pt, parsep=0pt}
+
+% ---------- TABLE OF CONTENTS (blue entries) ----------
+% All TOC entries and page numbers appear in blue.
+\renewcommand{\cftchapterfont}{\normalfont\bfseries\color{tocblue}}
+\renewcommand{\cftchapterpagefont}{\normalfont\bfseries\color{tocblue}}
+\renewcommand{\cftchapterleader}{\color{tocblue}\cftdotfill{\cftchapterdotsep}}
+\renewcommand{\cftsectionfont}{\normalfont\color{tocblue}}
+\renewcommand{\cftsectionpagefont}{\normalfont\color{tocblue}}
+\renewcommand{\cftsectionleader}{\color{tocblue}\cftdotfill{\cftsectiondotsep}}
+\renewcommand{\cftsubsectionfont}{\normalfont\itshape\color{tocblue}}
+\renewcommand{\cftsubsectionpagefont}{\normalfont\color{tocblue}}
+\renewcommand{\cftsubsectionleader}{\color{tocblue}\cftdotfill{\cftsubsectiondotsep}}
+
+% ---------- CUSTOM COMMANDS ----------
+
+% Ornamental divider (three diamonds)
+\newcommand{\ornamentaldivider}{%
+  \begin{center}
+    \vspace{6pt}
+    {\color{accent}\large$\diamond\;\diamond\;\diamond$}
+    \vspace{6pt}
+  \end{center}
+}
+
+% Thin decorative rule
+\newcommand{\thinnerule}{%
+  \begin{center}
+    \vspace{4pt}
+    {\color{accent}\rule{0.4\textwidth}{0.4pt}}
+    \vspace{4pt}
+  \end{center}
+}
+
+% Chapter opener (replaces \chapter with decorative version)
+\newcommand{\chapteropener}[2]{%
+  \chapter*{#2}%  starred chapter (no number, but gets heading styling)
+  \addcontentsline{toc}{chapter}{#1: #2}%
+  \thispagestyle{plain}%
+  \vspace*{30pt}%
+  \begin{center}
+    {\Large\bfseries\color{accent}\MakeUppercase{#1}}\\[8pt]
+    {\color{accent}\rule{0.3\textwidth}{0.5pt}}\\[10pt]
+    {\Huge\bfseries\color{textgray} #2}\\[10pt]
+    {\color{accent}\rule{0.3\textwidth}{0.5pt}}
+  \end{center}
+  \vspace{16pt}%
+}
+
+% Recipe box — styled block with tinted background
+% Uses a tikzpicture node for the box, avoiding minipage list issues.
+\newenvironment{recipebox}[1]{%
+  \par\vspace{8pt}%
+  \noindent%
+  \begin{tikzpicture}[remember picture]
+    \node[anchor=north west, inner sep=6pt, text width=\dimexpr\textwidth-8pt, fill=recipedbg, draw=accent, line width=1.5pt, rounded corners=2pt] (box) \bgroup%
+      \vspace{2pt}%
+      {\Large\bfseries\color{accent}#1}\\[4pt]
+      {\color{rulegray}\rule{\linewidth}{0.3pt}}\\[4pt]%
+}{%
+      \vspace{2pt}%
+    \egroup;
+  \end{tikzpicture}%
+  \par\vspace{8pt}%
+}
+
+% Yield line
+\newcommand{\yieldline}[1]{%
+  \begin{center}
+    \vspace{4pt}
+    {\small\itshape\color{rulegray}#1}
+    \vspace{6pt}
+  \end{center}
+}
+
+% ---------- DOCUMENT BEGIN ----------
+\begin{document}
+
+% ==========================================================
+% FRONT MATTER
+% ==========================================================
+\frontmatter
+\pagestyle{plain}
+
+% ---- Half title ----
+\begin{center}
+  \vspace*{\fill}
+  {\Large\bfseries\color{accent}\booktitle}
+  \vspace*{\fill}
+\end{center}
+\clearpage
+
+% ---- Title page ----
+\begin{center}
+  \vspace*{\fill}
+  {\Huge\bfseries\color{accent}\booktitle}\\[12pt]
+  {\Large\color{textgray}\booksubtitle}\\[40pt]
+  \ornamentaldivider
+  \vspace{10pt}
+  {\Large\color{textgray}\bookauthor}
+  \vspace*{\fill}
+\end{center}
+\clearpage
+
+% ---- Copyright page ----
+\begin{flushleft}
+  \vspace*{\fill}
+  {\footnotesize
+  Copyright \textcopyright\ \bookyear\ \bookauthor
+
+  \vspace{8pt}
+  All rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the copyright holder, except in the case of brief quotations embodied in critical reviews and certain other noncommercial uses permitted by copyright law.
+
+  \vspace{8pt}
+  Any AI-generated content in this book has been declared to the publishing platform in accordance with its content guidelines.
+  }
+  \vspace*{\fill}
+\end{flushleft}
+\clearpage
+
+% ---- Table of contents ----
+\begin{center}
+  {\Large\bfseries\color{tocblue}Contents}
+\end{center}
+\vspace{16pt}
+\setcounter{tocdepth}{2}
+\tableofcontents*
+\clearpage
+
+% ==========================================================
+% BODY
+% ==========================================================
+\mainmatter
+% Note: pagestyle is set to 'ruled' by default in memoir mainmatter.
+% Our custom header setup above applies to the 'rule' pagestyle.
+
+% In body.tex, use:
+%   \chapteropener{1}{Chapter Title}     — for beautiful chapter starts
+%   \lettrine[lines=3]{T}{he}            — for drop cap first paragraph
+%   \begin{recipebox}{Recipe Name}       — for styled recipe blocks
+%     Ingredients and instructions here
+%   \end{recipebox}
+%   \yieldline{Yield: 24 cookies • Prep: 15 min • Cook: 12 min}
+%
+\input{body}
+
+% ==========================================================
+% BACK MATTER
+% ==========================================================
+\backmatter
+\pagestyle{plain}
+
+% ---- About the Author ----
+\chapter*{About the Author}
+\addcontentsline{toc}{chapter}{About the Author}
+% Add your author bio here:
+% \lettrine[lines=2]{Y}{our} author bio text goes here...
+
+\end{document}
