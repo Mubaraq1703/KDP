@@ -1,0 +1,77 @@
+{
+  "manifest_version": 3,
+  "name": "Hemdrix KDP Wizard",
+  "version": "1.0.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApirQpA/CoNltJLqHwbMva9mT0eX1XfUixyfz8HUTicl4N+cR+njBeovWW2PiODMsUgR9tvt7QI6yFgE9Uh6AzQEdFSQLo+gvRroZd07UclZ9f/C7VYxatr9pehzAWvue62nYrfUxuMKVbXrkZStPKOLF2PRxGOiVrZV1zU27y691W6qR0XteFB4KTZn1toAIrCxLiL7IMT7JDjUIs2Gz8FXGKPYR5qTR4r7yc3c80m13F+O8qP+JF4rVJ8rAmtxZzZa7hpwhJiqBFuSAYc9Mp02nkRDGFmduAJGGxlfaM6tGTkGgYgZMVeAqq0UuWDWLB7t/5odtfp35IhHwIX3svwIDAQAB",
+  "description": "Instantly displays ASIN, BSR, ratings, reviews, and price on Amazon with sorted CSV export for KDP research.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.amazon.com/*",
+    "*://*.amazon.co.uk/*",
+    "*://*.amazon.ca/*",
+    "*://*.amazon.de/*",
+    "*://*.amazon.fr/*",
+    "*://*.amazon.it/*",
+    "*://*.amazon.es/*",
+    "*://*.amazon.co.jp/*",
+    "*://*.amazon.in/*",
+    "*://*.amazon.com.au/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.amazon.com/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.fr/*",
+        "*://*.amazon.it/*",
+        "*://*.amazon.es/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.in/*",
+        "*://*.amazon.com.au/*"
+      ],
+      "js": ["content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Hemdrix KDP Wizard",
+    "default_icon": {
+      "16": "logo.png",
+      "32": "logo.png",
+      "48": "logo.png",
+      "128": "logo.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["logo.png"],
+      "matches": [
+        "*://*.amazon.com/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.fr/*",
+        "*://*.amazon.it/*",
+        "*://*.amazon.es/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.in/*",
+        "*://*.amazon.com.au/*"
+      ]
+    }
+  ]
+}

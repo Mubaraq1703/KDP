@@ -1,0 +1,193 @@
+/* Premium Popup Styles for Hemdrix KDP Wizard */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0f172a; /* Slate 900 */
+  color: #f3f4f6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 300px;
+  overflow: hidden;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Header styling with gradient accent */
+.header {
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.4); /* Slate 800 */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6, #06b6d4);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.version {
+  font-size: 9px;
+  color: #9ca3af;
+  display: block;
+  margin-top: 1px;
+}
+
+/* Main Content Area */
+.content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Status Indicator */
+.status-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+.indicator-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.indicator-pulse::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* Status variants */
+.status-indicator.active .indicator-pulse {
+  background-color: #10b981; /* Green pulse */
+}
+
+.status-indicator.inactive .indicator-pulse {
+  background-color: #f59e0b; /* Yellow pulse */
+}
+
+/* Features List */
+.info-section h3 {
+  margin: 0 0 10px 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.features-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.features-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #d1d5db;
+}
+
+.check-icon {
+  width: 14px;
+  height: 14px;
+  fill: #8b5cf6;
+  flex-shrink: 0;
+}
+
+/* Instructions card */
+.instructions {
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.instructions p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #c084fc; /* Purple-200 */
+}
+
+/* Footer Section */
+footer {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+  font-size: 9px;
+  color: #6b7280;
+}
