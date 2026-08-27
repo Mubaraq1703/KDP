@@ -1,0 +1,171 @@
+/* ============================================================
+   BookFlow — Design Tokens & CSS Custom Properties
+   The single source of truth for all visual design decisions.
+   ============================================================ */
+
+:root {
+  /* ── Color Palette (Dark Theme Default) ─────────────────── */
+  --theme-mode:     dark;
+  --bg-base:        #090A0F;
+  --bg-elevated:    #0D0E16;
+  --bg-surface:     #111320;
+  --bg-overlay:     rgba(9, 10, 15, 0.85);
+
+  /* Glassmorphism */
+  --glass-bg:       rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.055);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.07);
+  --glass-border:   rgba(255, 255, 255, 0.08);
+  --glass-border-bright: rgba(255, 255, 255, 0.14);
+
+  /* Text Colors */
+  --text-main:      rgba(255, 255, 255, 0.92);
+  --text-body:      rgba(255, 255, 255, 0.82);
+  --text-subtle:    rgba(255, 255, 255, 0.65);
+  --text-muted:     rgba(255, 255, 255, 0.45);
+  --text-bright:    rgba(255, 255, 255, 0.98);
+
+  /* Accent Gradients */
+  --accent-primary:   #6366F1;
+  --accent-secondary: #8B5CF6;
+  --accent-gradient:  linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --accent-glow:      rgba(99, 102, 241, 0.3);
+  --accent-glow-soft: rgba(99, 102, 241, 0.12);
+
+  /* Status Colors */
+  --success:        #10B981;
+  --success-glow:   rgba(16, 185, 129, 0.4);
+  --success-soft:   rgba(16, 185, 129, 0.12);
+  --warning:        #F59E0B;
+  --warning-soft:   rgba(245, 158, 11, 0.15);
+  --danger:         #EF4444;
+  --danger-soft:    rgba(239, 68, 68, 0.15);
+  --info:           #3B82F6;
+  --info-soft:      rgba(59, 130, 246, 0.15);
+
+  /* File type colors */
+  --color-pdf:  #EF4444;
+  --color-docx: #3B82F6;
+  --color-jpg:  #10B981;
+  --color-txt:  #F59E0B;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* Type Scale — Modular (1.25 ratio) */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-md:   1.125rem;   /* 18px */
+  --text-lg:   1.25rem;    /* 20px */
+  --text-xl:   1.5rem;     /* 24px */
+  --text-2xl:  1.875rem;   /* 30px */
+  --text-3xl:  2.25rem;    /* 36px */
+  --text-4xl:  3rem;       /* 48px */
+
+  /* Font Weights */
+  --weight-normal:   400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-extrabold:800;
+
+  /* Letter Spacing */
+  --tracking-tight:  -0.025em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.025em;
+  --tracking-wider:   0.05em;
+  --tracking-caps:    0.1em;
+
+  /* ── Spacing Scale ─────────────────────────────────────── */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+
+  /* ── Border Radius ─────────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────────── */
+  --shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md:    0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg:    0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-xl:    0 32px 64px rgba(0, 0, 0, 0.5);
+  --shadow-glow:  0 0 20px var(--accent-glow);
+  --shadow-success-glow: 0 0 12px var(--success-glow);
+
+  /* ── Transitions ───────────────────────────────────────── */
+  --transition-fast:    all 0.15s ease;
+  --transition-normal:  all 0.25s ease;
+  --transition-smooth:  all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring:  all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-slow:    all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Layout ────────────────────────────────────────────── */
+  --navbar-height:    64px;
+  --tabbar-height:    60px;
+  --sidebar-width:    280px;
+  --content-max:      1200px;
+  --card-min-width:   280px;
+
+  /* ── Z-Index Stack ─────────────────────────────────────── */
+  --z-base:    1;
+  --z-card:    10;
+  --z-sticky:  100;
+  --z-modal:   1000;
+  --z-toast:   2000;
+  --z-top:     9999;
+}
+
+/* ── Light Mode Tokens ───────────────────────────────────── */
+[data-theme="light"] {
+  --theme-mode:     light;
+  --bg-base:        #F8FAFC;
+  --bg-elevated:    #FFFFFF;
+  --bg-surface:     #F1F5F9;
+  --bg-overlay:     rgba(248, 250, 252, 0.88);
+
+  /* Glassmorphism */
+  --glass-bg:       rgba(255, 255, 255, 0.82);
+  --glass-bg-hover: rgba(255, 255, 255, 0.96);
+  --glass-bg-heavy: rgba(241, 245, 249, 0.95);
+  --glass-border:   rgba(148, 163, 184, 0.28);
+  --glass-border-bright: rgba(99, 102, 241, 0.35);
+
+  /* Text Colors */
+  --text-main:      #0F172A;
+  --text-body:      #334155;
+  --text-subtle:    #64748B;
+  --text-muted:     #94A3B8;
+  --text-bright:    #020617;
+
+  /* Accent Adjustments */
+  --accent-glow:      rgba(99, 102, 241, 0.22);
+  --accent-glow-soft: rgba(99, 102, 241, 0.08);
+
+  /* Status Adjustments */
+  --success-soft:   rgba(16, 185, 129, 0.1);
+  --warning-soft:   rgba(245, 158, 11, 0.1);
+  --danger-soft:    rgba(239, 68, 68, 0.1);
+  --info-soft:      rgba(59, 130, 246, 0.1);
+
+  /* Shadows */
+  --shadow-sm:    0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md:    0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg:    0 16px 36px rgba(15, 23, 42, 0.10);
+  --shadow-xl:    0 24px 48px rgba(15, 23, 42, 0.14);
+}

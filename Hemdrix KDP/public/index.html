@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Primary Meta -->
+  <title>BookFlow — Document Packaging & Distribution</title>
+  <meta name="description" content="BookFlow is a secure, role-based Progressive Web App for document aggregation, packaging, and controlled distribution between Writers and Uploaders." />
+  <meta name="keywords" content="KDP, book publishing, document packaging, manuscript distribution" />
+  <meta name="author" content="Hemdrix KDP" />
+
+  <!-- PWA / Mobile -->
+  <meta name="theme-color" content="#090A0F" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BookFlow" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/icon.png" />
+
+  <!-- Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="BookFlow — Document Packaging & Distribution" />
+  <meta property="og:description" content="Secure, role-based PWA for automated book packaging and distribution." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/icon.png" />
+
+  <!-- Theme Init (Prevent Flash of Unstyled Theme) -->
+  <script>
+    (function() {
+      const theme = localStorage.getItem('bookflow-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Preload critical scripts -->
+  <link rel="modulepreload" href="/js/app.js" />
+  <link rel="modulepreload" href="/js/components.js" />
+</head>
+<body>
+
+  <!-- Application Root -->
+  <div id="app" role="application" aria-label="BookFlow Application">
+    <!-- Loading splash shown while JS boots -->
+    <div id="splash" style="
+      position:fixed;inset:0;
+      background:#090A0F;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      z-index:9999;
+      gap:1.5rem;
+      transition:opacity 0.4s ease;
+    ">
+      <img src="/icon.png" width="68" height="68" style="border-radius:50%;background:#ffffff;padding:6px;box-shadow:0 8px 32px rgba(99,102,241,0.5);object-fit:contain;animation:splashPulse 1.5s ease-in-out infinite" alt="BookFlow">
+      <div style="text-align:center">
+        <div style="font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;color:rgba(255,255,255,0.9)">BookFlow</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.35);margin-top:0.25rem">Loading your workspace…</div>
+      </div>
+      <style>
+        @keyframes splashPulse {
+          0%,100% { transform:scale(1); box-shadow:0 8px 32px rgba(99,102,241,0.4); }
+          50%      { transform:scale(1.06); box-shadow:0 12px 40px rgba(99,102,241,0.6); }
+        }
+      </style>
+    </div>
+  </div>
+
+  <!-- Socket.io Client (must load before app.js) -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Application Entry Point (ES Modules) -->
+  <script type="module" src="/js/app.js"></script>
+
+  <!-- Hide splash once JS modules load -->
+  <script type="module">
+    // The splash is hidden as soon as the module graph resolves
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      if (splash) {
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => splash.remove(), 400);
+      }
+    });
+  </script>
+
+</body>
+</html>

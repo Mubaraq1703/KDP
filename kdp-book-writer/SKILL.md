@@ -7,7 +7,7 @@ description: Expert writer + typesetter turning a book idea into a complete Amaz
 
 You are an expert book writer and print typesetter. You produce a **complete, upload-ready Amazon KDP paperback package** for each book, typeset with **Typst** (default) or **LaTeX** (premium) and compiled to PDF. The intended marketplace is **Amazon.co.jp**, so the default format is **A5 (148 x 210 mm)**, **black ink on white paper** — a standard, supported configuration there.
 
-**Engine choice:** Typst is the default — fast, clean, easy to edit. LaTeX (memoir class) is the premium option — it produces magazine-quality typography with ornamental drop caps, decorative chapter openers, professional running headers, and microtype character protrusion. Ask the user which they prefer; default to Typst unless they request premium output.
+**Engine choice:** Typst is the default — fast, clean, easy to edit. LaTeX (memoir class) is the premium option — it produces magazine-quality typography with decorative chapter openers, professional running headers, and microtype character protrusion. Ask the user which they prefer; default to Typst unless they request premium output.
 
 The deliverable is not just text. It is a full, professional publishing package:
 
@@ -18,10 +18,9 @@ The deliverable is not just text. It is a full, professional publishing package:
 │   ├── plan.md             # book plan, chapter list, word budgets
 │   ├── interior.typ        # Typst: front matter + page setup, includes body.typ
 │   ├── interior.tex        # LaTeX: front matter + page setup (memoir class)
-│   ├── body.typ            # Typst: the book content (chapters)
+│   ├── body.typ            # Typst: the book content (exports render-body)
 │   ├── body.tex            # LaTeX: the book content (chapters)
-│   ├── cover.typ           # Typst: full wrap-around cover (back + spine + front)
-│   ├── cover.tex           # LaTeX: full wrap-around cover (back + spine + front)
+│   ├── cover.typ           # Typst: full wrap-around cover (used for both interior routes)
 │   └── cover-image.png     # AI-generated cover image (if used, step 7a)
 ├── output/
 │   ├── <book-slug>-interior.pdf   # upload this to KDP (PDF route)
@@ -46,7 +45,7 @@ Every book starts with a short interview. **Always ask for the pen name first.**
 
 - **Title** (and optional subtitle)
 - **Output format**: **PDF** (typeset with Typst or LaTeX — the print-verified upload) or **Word DOCX** (editable manuscript via Pandoc, e.g. for an editor). Default to PDF; if DOCX, use step 5b instead of compiling the interior template.
-- **Typesetting engine** (when PDF): **Typst** (default — fast, clean) or **LaTeX** (premium — magazine-quality typography with drop caps, ornamental openers, microtype). If the user wants "beautiful", "elegant", or "premium" output, suggest LaTeX.
+- **Typesetting engine** (when PDF): **Typst** (default — fast, clean) or **LaTeX** (premium — magazine-quality typography with ornamental openers and microtype). If the user wants "beautiful", "elegant", or "premium" output, suggest LaTeX. Both routes use the same no-drop-cap policy.
 - **Language** (English / Spanish / French are fully supported; other languages work too but flag any concern)
 - **Genre / category** and target audience
 - **Target length**: pages or word count, or "you decide"
@@ -130,10 +129,18 @@ Present the report to the user in chat and wait for their confirmation before pr
 ### 3. Check the toolchain
 
 - **Typst** must be >= 0.11 (`typst --version`). If missing, stop and tell the user to install it (https://typst.app). Needed for the Typst route.
-- **LaTeX** (pdflatex or xelatex): check with `where pdflatex`. If using the LaTeX route, MiKTeX or TeX Live must be installed with packages: memoir, lettrine, titlesec, fancyhdr, microtype, tikz. MiKTeX auto-installs missing packages on first compile.
-- Pandoc must be >= 3.0 (`pandoc --version`) — **only needed on the DOCX route**. If missing, stop and tell the user to install it (https://pandoc.org). The Windows `dist/install.bat` packaged with the skill checks and installs both.
+- **LaTeX** (pdflatex or xelatex): check with `where pdflatex`. If using the LaTeX route, MiKTeX or TeX Live must be installed with packages: memoir, microtype, tikz, xcolor, enumitem, tabularx, booktabs, graphicx, xurl, and fvextra. MiKTeX auto-installs missing packages on first compile.
+- Pandoc must be >= 3.0 (`pandoc --version`) — **only needed on the DOCX route**. If missing, stop and tell the user to install it (https://pandoc.org).
 - Take note of available fonts: `typst fonts` (Typst route) or check TeX font availability. Pick the body font from this preference order (first one available): **Garamond, Georgia, Palatino Linotype, Bookman Old Style, Times New Roman**. Rationale: these are classic book serifs, installed on Windows, and embed cleanly in PDF output — which KDP requires. The title-page font can differ (use a matching serif; keep it readable).
 - Python 3 with `pymupdf` and optionally `pillow` (`python -c "import fitz"`). If missing, `pip install pymupdf`. The bundled `scripts/qa_pdf.py` and `scripts/cover_png.py` need it.
+
+
+> **Margin and overflow rules (apply to every book):**
+> - **Top margin must be >= 20 mm.** In LaTeX: \setulmarginsandblock{20mm}{...}{*}. In Typst: `top: 20mm`. Less than 20 mm clips page numbers at the KDP trim edge.
+> - **Required LaTeX packages in every interior:** add \usepackage{xurl} (URL line-breaking) and \usepackage{fvextra} (code block wrapping), plus \setlength{\emergencystretch}{3em} after \checkandfixthelayout.
+> - **Never use plain \begin{verbatim}** — it cannot wrap long lines and will bleed past the margin. Always use \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\small] from fvextra.
+> - **Tables (the #1 margin-bleed offender on A5):** always `\begin{tabularx}{\linewidth}{...}` with X columns. Inside any box environment (recipebox, accentbox) `\linewidth` is **narrower than \textwidth** — a `\textwidth` table in a box bleeds out of the page margin. For plain `tabular`, the total width is sum of p-widths **+ 2 × ncols × 6pt** of `\tabcolsep` padding; if that exceeds `\linewidth` it bleeds. Never hand-sum widths — use tabularx.
+> - **Custom box environments:** a tikz-node box whose node body opens in `\begin{...}` and closes in `\end{...}` MUST use `\bgroup`/`\egroup` (see `recipebox`/`accentbox` in the template), never `{`/`}`. A `{...}` pair split across the environment's begin/end code is an unbalanced-brace error that nonstopmode "tolerates" by **silently dropping the box and everything in it from the PDF**.
 
 ### 4. Plan the book before writing
 
@@ -164,30 +171,28 @@ Write genuinely good prose. You are the expert writer; the templates do layout, 
 
 #### 6a. Typst route (default)
 
-Copy `assets/interior.template.typ` to `src/interior.typ`. The template sets A5 paper, correct margins, fonts, title page, copyright page, optional table of contents, footer page numbers, and then includes `src/body.typ`. Edit only the `meta-*` variables at the top and the front-matter options — set `meta-inside-margin` from the page-count table below (`12.7mm` is right for most short books). Don't restructure the template; it's tuned to pass KDP review.
+Copy `assets/interior.template.typ` to `src/interior.typ` and `assets/body.template.typ` to `src/body.typ`. The interior template sets A5 paper, correct margins, fonts, title page, copyright page, optional table of contents, footer page numbers, and imports `render-body` from `src/body.typ`. Define the book content inside that function so the template helpers are available. Edit only the `meta-*` variables at the top and the front-matter options — set `meta-inside-margin` from the page-count table below (`12.7mm` is right for most short books). Don't restructure the template; it's tuned to pass KDP review.
 
 **Design variables** (edit these for beautiful output):
 - `meta-display-font` — display font for headings (default: Palatino Linotype). Use a bolder/decorative serif for contrast.
-- `meta-accent-color` — color for headings, dividers, and decorative elements (default: forest green `#2B5A3C`). Match your cover palette.
-- `meta-use-drop-caps` — ornamental drop caps at chapter starts (default: true)
+- `meta-accent-color` — grayscale accent for headings, dividers, and decorative elements (default: `#404040`; keep the interior black-and-white for the selected print configuration).
 - `meta-use-running-headers` — chapter name in running header (default: true)
-- `meta-use-recipe-boxes` — styled recipe card blocks with accent border (default: true, for cookbooks)
+- `meta-use-recipe-boxes` — reserved for recipe-specific body helpers; the bundled template always defines `#recipe-box`, so this flag is informational and does not toggle rendering
 
 **Decorative commands** available in body.typ:
-- `#chapter-opener("1", "Chapter Title")` — ornamental chapter opener with number badge, rules, and accent color
+- `#chapter-opener("1", "Chapter Title")` — ornamental chapter opener with number badge, rules, and accent color; it starts a fresh page and adds the chapter to the TOC
 - `#recipe-box("Recipe Name")[ ... ]` — styled recipe block with left accent border and tinted background
 - `#yield-line("Yield: 24 cookies • Prep: 15 min")` — centered yield/info line
 - `#ornamental-divider` — three-diamond decorative divider
 - `#thin-rule` — thin accent-colored horizontal rule
 
-Body content goes in `src/body.typ` using these conventions:
+Body content goes in `src/body.typ` using the `render-body` function exported by the bundled body template. The helper arguments are passed in by `interior.typ`, so do not call template helpers as undeclared globals. Use these conventions:
 
 ```typst
-// The template already starts the body on a fresh page.
-#chapter-opener("1", "The Road")   // beautiful chapter opener
+#let render-body(chapter-opener, recipe-box, yield-line, ornamental-divider, thin-rule) = [
+  #chapter-opener("1", "The Road")   // beautiful chapter opener
 
-// For the first paragraph, use a drop cap:
-#lettrine[The][road] was long and winding...
+The road was long and winding... Start the first paragraph normally. Drop caps are prohibited in every interior.
 
 Plain paragraph text. Later paragraphs are indented automatically.
 
@@ -204,14 +209,15 @@ Plain paragraph text. Later paragraphs are indented automatically.
 ]
 #yield-line("Yield: 12 slices • Prep: 20 min • Cook: 35 min")
 
-#pagebreak()             // put a #pagebreak() before EVERY chapter
-#chapter-opener("2", "The Path")
+  #chapter-opener("2", "The Path")   // the helper starts a fresh page
+]
 ```
 
 Key layout rules the template already enforces; read `references/kdp-spec.md` for the full table:
 
 - A5 trim = **148 x 210 mm**. No bleed for a text-only interior.
-- All margins **>= 0.25" (6.4 mm)**; for the gutter rule use this safe uniform margin per page count (no binding-aware mirroring needed — uniform margins pass KDP review and look clean):
+- All interior color should remain grayscale for the selected black-ink print configuration.
+- All margins **>= 0.25" (6.4 mm)**; for the gutter rule use this safe uniform margin per page count (the template applies the selected value uniformly to left and right pages):
   - 24–150 pages: **12.7 mm** (0.5")
   - 151–300 pages: **15.9 mm** (0.625")
   - 301–500 pages: **19.1 mm** (0.75")
@@ -239,34 +245,43 @@ The PDF route is the primary, print-verified path. The DOCX route produces an **
 
 ### 6c. LaTeX route (premium typography)
 
-When the user requests premium/beautiful/elegant output, use the LaTeX route instead of Typst. The LaTeX template uses the `memoir` class with professional typography packages.
+When the user requests premium/beautiful/elegant output, use the LaTeX route instead of Typst. The LaTeX template uses the `memoir` class with professional typography packages. Drop caps are not used in either typesetting route.
 
 Copy `assets/interior.template.tex` to `src/interior.tex` and `assets/body.template.tex` to `src/body.tex`. Edit the META commands at the top of `interior.tex`:
 - `\booktitle{}`, `\booksubtitle{}`, `\bookauthor{}`, `\bookyear{}`
-- `\definecolor{accent}{HTML}{2B5A3C}` — match your cover palette
+- `\booklanguage{english}` near the package block — use `english`, `spanish`, or `french` to match the manuscript language
+- `\definecolor{accent}{HTML}{404040}` — keep the interior grayscale; the cover may use its own palette
 
 **LaTeX design features (automatic):**
-- Ornamental drop caps via `lettrine` — use `\lettrine[lines=3]{T}{he}` at chapter starts
 - Decorative chapter openers via `\chapteropener{1}{Title}` — centered, numbered badge, accent rules
 - Styled recipe blocks via `\begin{recipebox}{Name}...\end{recipebox}` — tinted background, accent border
+- Callout/tip boxes via `\begin{accentbox}{Title}...\end{accentbox}` — same style, for key concepts, tips, and comparison tables
 - Running headers — chapter/section names in elegant italic
-- **Blue table of contents** — all TOC entries, page numbers, and dot leaders appear in blue (`tocblue` color). The "Contents" heading is also blue. This is always active in the LaTeX route.
+- **Grayscale table of contents** — TOC entries, page numbers, and dot leaders use `tocgray`; the "Contents" heading uses the same grayscale palette.
 - Microtype character protrusion — the subtle spacing improvement that makes LaTeX text look polished
 - TikZ decorative elements — ornamental dividers, chapter number badges
 
-**LaTeX compilation:**
+**LaTeX table rules (margin safety):**
+- Tables go in `body.tex` as `\begin{tabularx}{\linewidth}{...}` with `X` columns for the wide/text columns.
+- **Inside `recipebox`/`accentbox`, use `\linewidth`, never `\textwidth`** — the box's text column is narrower, and a `\textwidth` table bleeds past the page margin.
+- Do not use plain `tabular` with fixed `p{...}` columns unless you verify the width budget: sum of p-widths + 2 × ncols × 6pt ≤ `\linewidth`. Default to tabularx instead.
+
+**LaTeX compilation — with mandatory error gate:**
 ```bash
 cd src
 pdflatex -interaction=nonstopmode interior.tex  # run 1: generates .aux
 pdflatex -interaction=nonstopmode interior.tex  # run 2: resolves TOC, headers
+Select-String -Path interior.log -Pattern "^!"   # MUST return nothing
 cp interior.pdf ../output/<slug>-interior.pdf
 ```
-Note: pdflatex runs twice to resolve cross-references, TOC, and running headers. MiKTeX will auto-install missing packages on first run.
+**Zero errors is a hard gate.** `nonstopmode` does not stop at errors — it recovers by **dropping content** (a single unbalanced brace in a box environment silently deletes every box in the book). If the log contains any line starting with `!`, fix the source and recompile; never copy an error-filled PDF to `output/`. Note: pdflatex runs twice to resolve cross-references, TOC, and running headers. MiKTeX will auto-install missing packages on first run.
 
-**LaTeX body conventions (src/body.tex):**
+**Keep `output/` in sync:** the file in `output/` is what gets uploaded to KDP. After ANY later edit to `src/` (typo fix, table tweak, new chapter), re-run the full compile + error gate + QA, then re-copy to `output/`. Before delivery, confirm the output PDF's timestamp is newer than every file in `src/` — a stale output PDF is how fixed bugs ship anyway.
+
+**LaTeX body conventions (src/body.tex):** `\chapteropener` starts a fresh page, so do not add a separate `\clearpage` before it.
 ```latex
 \chapteropener{1}{The Road}     % beautiful chapter opener
-\lettrine[lines=3]{T}{he} road was long...  % drop cap first paragraph
+The road was long...  % Start the first paragraph normally.
 
 \section{A Subheading}          % level-2 heading
 
@@ -285,11 +300,10 @@ Note: pdflatex runs twice to resolve cross-references, TOC, and running headers.
 \end{recipebox}
 \yieldline{Yield: 12 slices \textbullet{} Prep: 20 min \textbullet{} Cook: 35 min}
 
-\clearpage                    % page break before next chapter
-\chapteropener{2}{The Path}
+\chapteropener{2}{The Path}       % the helper starts a fresh page
 ```
 
-The cover for the LaTeX route still uses the Typst cover template (`assets/cover.template.typ`) — covers are independent of the interior engine. Render the cover PDF with Typst, then convert to PNG.
+The cover for the LaTeX route uses the same Typst cover template (`assets/cover.template.typ`) — covers are independent of the interior engine. Render the cover PDF with Typst, then convert to PNG.
 
 ### 7. Cover — AI-generated image or premium design (A5 front cover)
 
@@ -445,14 +459,16 @@ The PNG dimensions must equal `(2*5.83 + spine + 2*0.125)"` wide by `(8.27 + 2*0
 
 ### 8. QA before delivering
 
-Run the bundled QA script on the interior PDF, fix anything it flags, and re-compile:
+Run the bundled QA script on the interior PDF, fix anything it flags, and re-compile. Pass the book's actual side margin (the first `\setlrmarginsandblock` value; the LaTeX template default is 12.7 mm) as the fourth argument so the margin-bleed check uses the right boundary:
 
 ```bash
-python "scripts/qa_pdf.py" output/<slug>-interior.pdf 148 210
+python "scripts/qa_pdf.py" output/<slug>-interior.pdf 148 210 12.7
 ```
 
-This verifies page size, page count range, embedded fonts, and flags suspicious blank runs. Then do the manual checklist (write the results in `output/qa-report.txt`):
+This verifies page size, page count range, embedded fonts, flags suspicious blank runs, and checks that no table rule or body text bleeds past the side margins (rule bleed = FAIL; text bleed beyond ~3pt of microtype protrusion = WARN). Then do the manual checklist (write the results in `output/qa-report.txt`):
 
+- The compile log (`src/interior.log`) contains **zero lines starting with `!`** — error-tolerant compiles silently drop content; also confirm the selected `booklanguage` matches the manuscript.
+- The `output/` PDF is newer than every file in `src/` (no stale uploads), and the QA above was run on the **output** file, not on `src/interior.pdf`.
 - Title page, copyright page, and cover **exactly match** the title/author you'll enter on KDP.
 - No placeholder text anywhere; no crop marks; no consecutive blank runs.
 - Page numbers sequential; text >= 7pt everywhere; images (if any) embedded at >= 300 DPI.

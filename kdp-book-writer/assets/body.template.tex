@@ -4,21 +4,28 @@
 %
 % COMMANDS AVAILABLE:
 %   \chapteropener{1}{Chapter Title}       — ornamental chapter opener
-%   \lettrine[lines=3]{T}{ext}            — drop cap first paragraph
+%   Start the first paragraph normally; drop caps are not used.
 %   \begin{recipebox}{Name} ... \end{recipebox}  — styled recipe block
+%   \begin{accentbox}{Title} ... \end{accentbox} — styled callout/tip box
 %   \yieldline{Yield: 24 • Prep: 15 min}  — centered yield line
 %   \ornamentaldivider                    — three-diamond divider
 %   \thinnerule                           — thin accent rule
 %
-% Use \clearpage before each \chapteropener (except the first).
+% \chapteropener starts a fresh page; do not add another page break before it.
+%
+% TABLE RULES (A5 margin safety):
+%   - Anywhere:        \begin{tabularx}{\linewidth}{...} with X columns.
+%   - Inside a box:    ALWAYS \linewidth, never \textwidth.
+%   - Plain tabular:   sum of p-widths + 2*ncols*6pt must stay <= \linewidth.
+%   Good: \begin{tabularx}{\linewidth}{lXX} ... \end{tabularx}
+%   Bad:  \begin{tabular}{p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}}
+%         (0.9\linewidth of columns + 36pt of padding overflows A5)
 % ==========================================================
 
 \chapteropener{1}{Chapter Title}
 
-\lettrine[lines=3, lhang=0.33, loversize=0.1]{T}{he} first paragraph of
-your chapter starts with a decorative drop cap. The rest of the paragraph
-flows normally. This is where you introduce the chapter's theme, set the
-tone, and draw the reader in.
+The first paragraph of your chapter starts normally. This is where you
+introduce the chapter's theme, set the tone, and draw the reader in.
 
 Subsequent paragraphs are indented and justified automatically by the
 memoir class. No special markup is needed for body text.
@@ -51,6 +58,21 @@ They appear in the table of contents and in the running headers.
 
 \yieldline{Yield: 12 servings \textbullet{} Prep: 15 minutes \textbullet{} Cook: 30 minutes}
 
+\begin{accentbox}{Key Concept}
+Callout boxes highlight tips, key concepts, or comparisons. Tables inside
+any box must use \texttt{\textbackslash linewidth}, never
+\texttt{\textbackslash textwidth}:
+
+\begin{tabularx}{\linewidth}{lXX}
+\toprule
+\textbf{Feature} & \textbf{Option A} & \textbf{Option B} \\
+\midrule
+Cost & Low & High \\
+Speed & Fast & Slow \\
+\bottomrule
+\end{tabularx}
+\end{accentbox}
+
 \thinnerule
 
 More paragraph text after the recipe. The recipe box provides a visual
@@ -61,6 +83,5 @@ flipping through the book.
 
 \chapteropener{2}{Next Chapter}
 
-\lettrine[lines=3]{B}{eginning} another chapter with a fresh drop cap
-and the ornamental chapter opener creates a consistent rhythm throughout
-the book.
+Beginning another chapter with the ornamental chapter opener creates a
+consistent rhythm throughout the book.

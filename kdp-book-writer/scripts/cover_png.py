@@ -9,6 +9,7 @@ Defaults to 300 DPI. Prints the final cover size in inches and pixels so the
 author can cross-check it against KDP's calculator.
 
 Requires PyMuPDF:  pip install pymupdf
+For JPG output, also requires Pillow:  pip install pillow
 """
 
 import pathlib
@@ -38,8 +39,12 @@ def main() -> None:
     zoom = dpi / 72.0
     pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), alpha=False)
 
-    if out.suffix.lower() == ".jpg" or out.suffix.lower() == ".jpeg":
-        pix.pil_save(out, format="JPEG", quality=95)
+    if out.suffix.lower() in {".jpg", ".jpeg"}:
+        try:
+            pix.pil_save(out, format="JPEG", quality=95)
+        except (ImportError, ModuleNotFoundError) as exc:
+            print("ERROR: JPG output requires Pillow; install it with: pip install pillow")
+            raise SystemExit(1) from exc
     else:
         pix.save(out)
 

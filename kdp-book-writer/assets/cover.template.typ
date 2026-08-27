@@ -56,7 +56,7 @@
 
 // ---------- PAGE ----------
 #set page(width: page-w, height: page-h, margin: 0pt)
-#set text(font: "Garamond", fill: fg)
+#set text(font: ("Garamond", "Georgia", "Palatino Linotype", "Bookman Old Style", "Times New Roman"), fill: fg)
 
 // Full-bleed background so there is no white border after trimming.
 #place(dx: 0mm, dy: 0mm, box(width: 100%, height: 100%, fill: bg))

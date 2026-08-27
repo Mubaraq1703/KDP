@@ -64,7 +64,7 @@ The right-hand column is the safe uniform margin the template uses for left and 
   - height = trim + 2 x bleed
   - for A5 white paper with a 6 mm spine: 308.35 x 216.35 mm.
 - Background color/image must extend across the entire page (no white bars after trim).
-- **Spine width:** KDP's approximate white-paper thickness is **0.002252" per page** (≈ 0.0572 mm/page). 95 pages ≈ 5.4 mm; 130 pages ≈ 7.4 mm. **Always confirm the exact spine with KDP's cover calculator before submitting**, and re-render the cover if it differs. Spine text is only legible once the spine is >= 7 mm (~130 pages) and KDP adds spine text at ~79+ pages.
+- **Spine width:** KDP's approximate white-paper thickness is **0.002252" per page** (≈ 0.0572 mm/page). 95 pages ≈ 5.4 mm; 130 pages ≈ 7.4 mm. **Always confirm the exact spine with KDP's cover calculator before submitting**, and re-render the cover if it differs. The bundled cover template suppresses spine text below 7 mm for legibility; follow the current KDP cover calculator and help page for eligibility and placement rules.
 - Keep all cover text away from trim edges (this template insets 12 mm) and at least ~0.0625" from spine text edges.
 
 ## 6. Title setup / listing metadata

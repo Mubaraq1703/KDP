@@ -1,0 +1,35 @@
+{
+  "name": "BookFlow",
+  "short_name": "BookFlow",
+  "description": "Multi-Role Document Packaging & Distribution Engine",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#090A0F",
+  "background_color": "#090A0F",
+  "lang": "en",
+  "categories": ["productivity", "business"],
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "72x72 96x96 128x128 144x144 152x152 384x384",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "BookFlow App"
+    }
+  ]
+}

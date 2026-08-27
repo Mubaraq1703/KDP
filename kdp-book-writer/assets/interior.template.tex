@@ -2,59 +2,65 @@
 % KDP A5 INTERIOR TEMPLATE — LaTeX (memoir class)
 % A5 / 148x210mm, black ink, white paper
 % Marketplace target: Amazon.co.jp
-% DESIGN: Premium — ornamental chapter openers, drop caps,
+% DESIGN: Premium — ornamental chapter openers,
 %          running headers, styled recipe blocks, microtype.
 % Edit the META block below, then compile:
-%   pdflatex interior.tex
-%   pdflatex interior.tex   (run twice for TOC and headers)
+%   pdflatex -interaction=nonstopmode interior.tex
+%   pdflatex -interaction=nonstopmode interior.tex   (run twice for TOC and headers)
+%   findstr /c:"^!" interior.log   (MUST output nothing — errors mean dropped content)
+%   copy /y interior.pdf ..\output\<slug>-interior.pdf
 % ==========================================================
 
-\documentclass[a5paper, 10.5pt, openright, twoside]{memoir}
+\documentclass[a5paper, openany, twoside]{memoir}
 
 % ---------- PACKAGES ----------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[english]{babel}
+\usepackage{lmodern}            % Type1 Computer Modern (keeps \texttt from
+                                % falling back to Type3 bitmap fonts, which
+                                % KDP rejects as non-embedded)
+% Edit this language value before compiling: english, spanish, or french.
+\newcommand{\booklanguage}{english}
+\usepackage[\booklanguage]{babel}
 \usepackage{microtype}          % character protrusion + font expansion (THE secret sauce)
-\usepackage{lettrine}           % ornamental drop caps
 \usepackage{tikz}               % decorative elements
 \usepackage{xcolor}             % colored accents
 \usepackage{enumitem}           % customized lists
 \usepackage{tabularx}           % flexible tables
 \usepackage{booktabs}           % professional table rules
 \usepackage{graphicx}           % images (if needed)
-\usepackage{parskip}            % paragraph spacing (alternative to indent)
-\usepackage{setspace}           % line spacing control
 
 % ---------- META (edit these) ----------
 \newcommand{\booktitle}{Your Book Title}
-\newcommand{\booksubtitle}{A subtitle that sells}
+\newcommand{\booksubtitle}{}
 \newcommand{\bookauthor}{Your Pen Name}
 \newcommand{\bookyear}{2026}
 
 % ---------- COLOR PALETTE ----------
-\definecolor{accent}{HTML}{2B5A3C}    % forest green — change to match your cover
-\definecolor{accentlight}{HTML}{E8F0EB}
+\definecolor{accent}{HTML}{404040}    % grayscale interior accent
+\definecolor{accentlight}{HTML}{EEEEEE}
 \definecolor{textgray}{HTML}{333333}
-\definecolor{rulegray}{HTML}{B0A999}
-\definecolor{recipedbg}{HTML}{F8F6F2}
-\definecolor{tocblue}{HTML}{1A5276}   % blue for table of contents entries
+\definecolor{rulegray}{HTML}{888888}
+\definecolor{recipedbg}{HTML}{F2F2F2}
+\definecolor{tocgray}{HTML}{404040}   % grayscale table of contents entries
 
+\usepackage{xurl}             % allow line-breaks anywhere in URLs
+\usepackage{fvextra}           % breaklines=true in Verbatim blocks prevents margin overflow
 % ---------- PAGE GEOMETRY (A5 with KDP margins) ----------
 \settrimmedsize{210mm}{148mm}{*}
 \setlrmarginsandblock{12.7mm}{12.7mm}{*}
-\setulmarginsandblock{16mm}{16mm}{*}
+\setulmarginsandblock{20mm}{20mm}{*}
 \setheadfoot{\baselineskip}{2\baselineskip}
 \setheaderspaces{*}{2\baselineskip}{*}
 \checkandfixthelayout
+\setlength{\headwidth}{\textwidth}  % keep headers/rules inside the text block
+\setlength{\emergencystretch}{3em}  % prevent long words/URLs overflowing margin
 
 % ---------- TYPOGRAPHY ----------
 \renewcommand{\rmdefault}{ppl}  % Palatino as body font
 \renewcommand{\bfdefault}{b}    % bold weight
-
 \setlength{\parindent}{3.5mm}
 \setlength{\parskip}{0pt}
-\linespread{1.15}               % comfortable reading spacing
 
 % ---------- CHAPTER HEADINGS (memoir built-in) ----------
 % Memoir provides its own chapter heading customization — no titlesec needed.
@@ -82,7 +88,6 @@
 
 % ---------- SECTION HEADINGS (memoir built-in) ----------
 \setsecheadstyle{\normalfont\Large\bfseries\color{accent}}
-\setaftersecheffect{}
 \setsubsecheadstyle{\normalfont\large\itshape\color{textgray}}
 \setsubsubsecheadstyle{\normalfont\normalsize\bfseries\itshape\color{textgray}}
 
@@ -94,8 +99,8 @@
 \makeoddhead{ruled}{\small\itshape\color{rulegray}\rightmark}{}{}
 \makeevenfoot{ruled}{}{\small\color{textgray}\thepage}{}
 \makeoddfoot{ruled}{}{\small\color{textgray}\thepage}{}
-\makeheadrule{ruled}{\headwidth}{0.3pt}
-\makefootrule{ruled}{\headwidth}{0pt}{}
+\makeheadrule{ruled}{\textwidth}{0.3pt}
+\makefootrule{ruled}{\textwidth}{0pt}{}
 
 % Plain pagestyle (chapter openers) — just page number, no header
 \makepagestyle{plain}
@@ -107,17 +112,17 @@
 \setlist[itemize]{leftmargin=*, itemsep=2pt, parsep=0pt}
 \setlist[enumerate]{leftmargin=*, itemsep=2pt, parsep=0pt}
 
-% ---------- TABLE OF CONTENTS (blue entries) ----------
-% All TOC entries and page numbers appear in blue.
-\renewcommand{\cftchapterfont}{\normalfont\bfseries\color{tocblue}}
-\renewcommand{\cftchapterpagefont}{\normalfont\bfseries\color{tocblue}}
-\renewcommand{\cftchapterleader}{\color{tocblue}\cftdotfill{\cftchapterdotsep}}
-\renewcommand{\cftsectionfont}{\normalfont\color{tocblue}}
-\renewcommand{\cftsectionpagefont}{\normalfont\color{tocblue}}
-\renewcommand{\cftsectionleader}{\color{tocblue}\cftdotfill{\cftsectiondotsep}}
-\renewcommand{\cftsubsectionfont}{\normalfont\itshape\color{tocblue}}
-\renewcommand{\cftsubsectionpagefont}{\normalfont\color{tocblue}}
-\renewcommand{\cftsubsectionleader}{\color{tocblue}\cftdotfill{\cftsubsectiondotsep}}
+% ---------- TABLE OF CONTENTS (grayscale entries) ----------
+% All TOC entries and page numbers use the grayscale accent.
+\renewcommand{\cftchapterfont}{\normalfont\bfseries\color{tocgray}}
+\renewcommand{\cftchapterpagefont}{\normalfont\bfseries\color{tocgray}}
+\renewcommand{\cftchapterleader}{\color{tocgray}\cftdotfill{\cftchapterdotsep}}
+\renewcommand{\cftsectionfont}{\normalfont\color{tocgray}}
+\renewcommand{\cftsectionpagefont}{\normalfont\color{tocgray}}
+\renewcommand{\cftsectionleader}{\color{tocgray}\cftdotfill{\cftsectiondotsep}}
+\renewcommand{\cftsubsectionfont}{\normalfont\itshape\color{tocgray}}
+\renewcommand{\cftsubsectionpagefont}{\normalfont\color{tocgray}}
+\renewcommand{\cftsubsectionleader}{\color{tocgray}\cftdotfill{\cftsubsectiondotsep}}
 
 % ---------- CUSTOM COMMANDS ----------
 
@@ -139,11 +144,12 @@
   \end{center}
 }
 
-% Chapter opener (replaces \chapter with decorative version)
+% Chapter opener — one decorative title, one fresh page, one TOC entry, and no duplicate chapter heading.
 \newcommand{\chapteropener}[2]{%
-  \chapter*{#2}%  starred chapter (no number, but gets heading styling)
-  \addcontentsline{toc}{chapter}{#1: #2}%
+  \clearpage%
   \thispagestyle{plain}%
+  \markboth{#2}{#2}%
+  \addcontentsline{toc}{chapter}{#1: #2}%
   \vspace*{30pt}%
   \begin{center}
     {\Large\bfseries\color{accent}\MakeUppercase{#1}}\\[8pt]
@@ -156,6 +162,10 @@
 
 % Recipe box — styled block with tinted background
 % Uses a tikzpicture node for the box, avoiding minipage list issues.
+% CRITICAL: the node body is opened with \bgroup and closed with \egroup
+% (NOT { and }). Classic \newenvironment stores begin/end code in separate
+% macros; a {....} pair split across them is an unbalanced-brace error that
+% nonstopmode "tolerates" by DROPPING the box content from the PDF.
 \newenvironment{recipebox}[1]{%
   \par\vspace{8pt}%
   \noindent%
@@ -171,6 +181,37 @@
   \par\vspace{8pt}%
 }
 
+% Callout / highlight box — for tips, key concepts, comparisons.
+% Same safe \bgroup/\egroup pattern as recipebox. Copy this environment
+% (rename it) when a book needs its own styled callout — do NOT invent a
+% new tikz box with { } braces.
+\newenvironment{accentbox}[1]{%
+  \par\vspace{8pt}%
+  \noindent%
+  \begin{tikzpicture}
+    \node[inner sep=8pt, text width=\dimexpr\textwidth-16pt\relax, fill=accentlight, draw=accent, line width=1.5pt, rounded corners=2pt] \bgroup%
+      \vspace{2pt}%
+      {\Large\bfseries\color{accent}#1}\\[4pt]
+      {\color{rulegray}\rule{\linewidth}{0.3pt}}\\[4pt]%
+}{%
+      \vspace{2pt}%
+    \egroup;%
+  \end{tikzpicture}%
+  \par\vspace{8pt}%
+}
+
+% ---------- TABLE RULES (margin safety on A5) ----------
+% Inside ANY box environment (recipebox, accentbox) the text column is
+% \linewidth, which is NARROWER than \textwidth. Tables in boxes must use
+% \begin{tabularx}{\linewidth}{...} — never \textwidth (they bleed past
+% the page margin).
+% For plain tabular with fixed p{...} columns, remember the padding:
+%   total width = sum of p-widths + 2 * (number of columns) * \tabcolsep
+%   (\tabcolsep defaults to 6pt per side). If the total exceeds
+%   \linewidth the table bleeds out of the margin. Prefer tabularx:
+%   \begin{tabularx}{\linewidth}{p{0.3\linewidth}p{0.2\linewidth}X}
+% where X columns absorb the remaining width automatically.
+
 % Yield line
 \newcommand{\yieldline}[1]{%
   \begin{center}
@@ -182,11 +223,12 @@
 
 % ---------- DOCUMENT BEGIN ----------
 \begin{document}
+\fontsize{10.5pt}{16pt}\selectfont  % explicit body size and leading
+\pagenumbering{arabic}
 
 % ==========================================================
 % FRONT MATTER
 % ==========================================================
-\frontmatter
 \pagestyle{plain}
 
 % ---- Half title ----
@@ -201,7 +243,9 @@
 \begin{center}
   \vspace*{\fill}
   {\Huge\bfseries\color{accent}\booktitle}\\[12pt]
-  {\Large\color{textgray}\booksubtitle}\\[40pt]
+  \if\relax\detokenize\expandafter{\booksubtitle}\relax\else
+    {\Large\color{textgray}\booksubtitle}\\[40pt]
+  \fi
   \ornamentaldivider
   \vspace{10pt}
   {\Large\color{textgray}\bookauthor}
@@ -227,23 +271,22 @@
 
 % ---- Table of contents ----
 \begin{center}
-  {\Large\bfseries\color{tocblue}Contents}
+  {\Large\bfseries\color{tocgray}Contents}
 \end{center}
 \vspace{16pt}
 \setcounter{tocdepth}{2}
 \tableofcontents*
 \clearpage
+\pagestyle{ruled}
 
-% ==========================================================
-% BODY
-% ==========================================================
-\mainmatter
-% Note: pagestyle is set to 'ruled' by default in memoir mainmatter.
-% Our custom header setup above applies to the 'rule' pagestyle.
-
+% NOTE: For code blocks use fvextra Verbatim (NOT plain verbatim):
+%   \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\small]
+%   ... your code ...
+%   \end{Verbatim}
+% Plain \begin{verbatim} cannot wrap long lines and WILL overflow the margin.
 % In body.tex, use:
 %   \chapteropener{1}{Chapter Title}     — for beautiful chapter starts
-%   \lettrine[lines=3]{T}{he}            — for drop cap first paragraph
+%   Start the first paragraph normally; drop caps are not used.
 %   \begin{recipebox}{Recipe Name}       — for styled recipe blocks
 %     Ingredients and instructions here
 %   \end{recipebox}
@@ -254,13 +297,12 @@
 % ==========================================================
 % BACK MATTER
 % ==========================================================
-\backmatter
 \pagestyle{plain}
 
 % ---- About the Author ----
 \chapter*{About the Author}
 \addcontentsline{toc}{chapter}{About the Author}
 % Add your author bio here:
-% \lettrine[lines=2]{Y}{our} author bio text goes here...
+% Your author bio text goes here...
 
 \end{document}

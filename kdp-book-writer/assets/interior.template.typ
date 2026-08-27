@@ -1,7 +1,7 @@
 // ==========================================================
 // KDP A5 INTERIOR TEMPLATE  (A5 / 148x210mm, black ink, white paper)
 // Marketplace target: Amazon.co.jp
-// DESIGN: Decorative — ornamental chapter openers, drop caps,
+// DESIGN: Decorative — ornamental chapter openers,
 //          running headers, styled recipe blocks, two-font system.
 // Edit ONLY the META block below, then compile:
 //   typst compile interior.typ interior.pdf
@@ -22,10 +22,8 @@
 #let meta-body-font = "Garamond"
 #let meta-display-font = "Palatino Linotype"
 #let meta-inside-margin = 12.7mm   // gutter-safe uniform margin (see SKILL.md table)
-#let meta-accent-color = rgb("#2B5A3C")  // color for headings and decorative elements
-#let meta-use-drop-caps = true   // ornamental drop caps at chapter starts
+#let meta-accent-color = rgb("#404040")  // grayscale accent for headings and decorative elements
 #let meta-use-running-headers = true  // chapter name in running header
-#let meta-use-recipe-boxes = true    // styled recipe card blocks
 // ---------------------------------
 
 // ---------- FONTS & TEXT ----------
@@ -40,7 +38,7 @@
 // ---------- PAGE ----------
 #set page(
   paper: "a5",
-  margin: (left: meta-inside-margin, right: meta-inside-margin, top: 16mm, bottom: 16mm),
+  margin: (left: meta-inside-margin, right: meta-inside-margin, top: 20mm, bottom: 16mm),
   numbering: "1",
   header: if meta-use-running-headers [
     #set text(font: meta-body-font, size: 8pt, fill: luma(120))
@@ -129,8 +127,7 @@
 #show enum: set par(leading: 15pt)
 
 // ---------- RECIPE BOX STYLING ----------
-// If meta-use-recipe-boxes is enabled, we style recipe yield/info blocks
-// This is handled via a show rule on a custom function in body.typ
+// Recipe styling is provided by the recipe-box helper below.
 
 // ==========================================================
 // FRONT MATTER
@@ -217,11 +214,9 @@ Any AI-generated content in this book has been declared to the publishing platfo
   v(8pt)
   // Thin rule above title
   align(center)[#line(length: 30%, stroke: 0.5pt + meta-accent-color)]
-  v(10pt)
-  // Chapter title
+  v(10pt)  // Chapter title is a real level-1 heading so the TOC and running-header query can see it.
   align(center)[
-    #set text(font: (meta-display-font, "Garamond"), size: 22pt, weight: "bold", tracking: 0.3pt, fill: luma(20))
-    #title
+    #heading(level: 1, outlined: true, bookmarked: true, numbering: none)[#title]
   ]
   v(10pt)
   // Thin rule below title
@@ -247,13 +242,13 @@ Any AI-generated content in this book has been declared to the publishing platfo
       right: none,
     ),
     radius: 2pt,
-    fill: rgb("#F8F6F2"),
+    fill: rgb("#F2F2F2"),
   )[
     // Recipe title
     #text(font: (meta-display-font, "Garamond"), size: 13pt, weight: "bold", fill: meta-accent-color)[#title]
     #v(6pt)
     // Thin accent line
-    #line(length: 100%, stroke: 0.3pt + rgb("#D4CFC7"))
+    #line(length: 100%, stroke: 0.3pt + rgb("#B0B0B0"))
     #v(6pt)
     // Recipe body
     #set text(size: 10pt)
@@ -280,13 +275,16 @@ Any AI-generated content in this book has been declared to the publishing platfo
 // ==========================================================
 // BODY
 // ==========================================================
-// The body file starts on its own fresh page here.
-// In body.typ, use:
-//   #pagebreak() before EVERY chapter EXCEPT the first one
-//   #chapter-opener("1", "Chapter Title") for beautiful chapter starts
-//   #recipe-box("Recipe Name")[ ... ] for styled recipe blocks
-#pagebreak()
-#include "body.typ"
+// The body file is a module that exports `render-body` so it can receive
+// these template helpers without relying on cross-file global scope.
+#import "body.typ": render-body
+#render-body(
+  chapter-opener,
+  recipe-box,
+  yield-line,
+  ornamental-divider,
+  thin-rule,
+)
 
 // ==========================================================
 // BACK MATTER
